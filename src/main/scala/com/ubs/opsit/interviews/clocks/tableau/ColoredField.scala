@@ -1,4 +1,4 @@
-package com.ubs.opsit.interviews.clocks
+package com.ubs.opsit.interviews.clocks.tableau
 
 /**
  * Project: java-berlin-clock
