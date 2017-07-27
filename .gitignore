@@ -8,3 +8,4 @@ gradle-app.setting
 *.iws
 /out/
 .idea_modules/
+/target/
