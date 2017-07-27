@@ -38,5 +38,22 @@ class BerlinClockTest extends org.specs2.mutable.Specification with Matchers {
       BerlinClock(13, 59, 100) must throwAn[IllegalArgumentException](expectedMessagePattern)
       BerlinClock(0, 59, 59) must haveClass[BerlinClock[String]]
     }
+
+    "provide BerlinClockConverter for one of the BerlinClockRenderers" in {
+      implicit val renderer = BerlinClockRenderers.StraightAndDirtyBerlinClockRenderer
+      BerlinClock.BerlinClockConverter[String](renderer) must beAnInstanceOf[StringParsingClock[BerlinClock[String]]]
+    }
+  }
+  "BerlinClockConverter" should {
+    val converter = BerlinClock.BerlinClockConverter[String](BerlinClockRenderers.StraightAndDirtyBerlinClockRenderer)
+    "accept propery formated time string" in {
+      converter.fromString("13:17:01") must_== BerlinClock(13, 17, 1)
+    }
+    "process special case time 24:00:00" in {
+      converter.fromString("24:00:00") must_== BerlinClock.Midnight
+    }
+    "reject inproperly formatted time string" in {
+      converter.fromString("bla:bla:bla") must throwAn[java.time.format.DateTimeParseException](message = "could not be parsed")
+    }
   }
 }
